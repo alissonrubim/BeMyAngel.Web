@@ -1,1 +1,1 @@
-# bemyangel-frontend
+# Be My Angel - Front-End
