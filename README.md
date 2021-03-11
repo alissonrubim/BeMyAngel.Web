@@ -1,1 +1,1 @@
-# Be My Angel - Front-End
+# Be My Angel - Web Application
