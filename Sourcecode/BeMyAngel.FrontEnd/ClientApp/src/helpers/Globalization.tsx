@@ -1,5 +1,5 @@
 export default class Globalization {
-    static GetString(text: string){
-        return text;
-    }
+  static GetString(text: string){
+    return text;
+  }
 }

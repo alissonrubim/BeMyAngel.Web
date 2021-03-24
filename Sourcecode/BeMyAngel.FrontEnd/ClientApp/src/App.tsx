@@ -1,17 +1,19 @@
 import React, { Component } from 'react';
-import { Route, BrowserRouter } from 'react-router-dom';
-import Home from './pages/Home';
-import ChatRoom from './pages/ChatRoom';
+import { BrowserRouter } from 'react-router-dom';
+import "./App.css";
+import { ThemeProvider } from '@material-ui/core';
+import MainTheme  from './Themes';
+
+import MainArea from 'areas/main/MainArea';
+import AngelArea from 'areas/angel/AngelArea';
 
 export default class App extends Component {
-  static displayName = App.name;
-
-  render () {
-    return ( 
+  render() {
+    return (<ThemeProvider theme={MainTheme}>
       <BrowserRouter>
-        <Route exact path='/' component={Home} />
-        <Route exact path='/chatroom' component={ChatRoom} />
+        <MainArea path="/"/>
+        <AngelArea path="/angel"/>
       </BrowserRouter>
-    );
+    </ThemeProvider>);
   }
 }
