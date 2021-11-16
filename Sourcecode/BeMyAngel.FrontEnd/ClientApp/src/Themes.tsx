@@ -4,16 +4,16 @@ import { createMuiTheme } from '@material-ui/core';
 const MainTheme = createMuiTheme({
   palette: {
     primary: {
-      main: "#7c54f7",
+      main: "#bd57d5",
     },
     secondary: {
       main: '#fff',
     },
   },
   overrides: {
-    MuiButton: { //https://material-ui.com/pt/api/button/
+    MuiButton: { 
       containedSecondary: {
-        color: "#7c54f7"
+        color: "#bd57d5"
       }
     },
   }

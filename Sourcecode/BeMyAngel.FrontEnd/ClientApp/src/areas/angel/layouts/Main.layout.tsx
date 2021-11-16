@@ -1,9 +1,8 @@
 import React from 'react';
 import Globalization from '../../../helpers/Globalization';
-import { Button, Container, Box, Paper, makeStyles, AppBar, Toolbar, Typography, Link } from '@material-ui/core';
+import { Button, Container, Box, makeStyles, AppBar, Toolbar, Typography, Link } from '@material-ui/core';
 import Logo from '../../../resources/images/be_my_angel.svg'
-import AuthorizonContext from '../../../helpers/Authorization'
-import { Redirect } from 'react-router';
+import AuthorizationContext from '../../../helpers/Authorization'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,13 +19,18 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Layout(props: any) {
+export default function MainLayout(props: any) {
     const classes = useStyles();
 
+    function doLogout(){
+      AuthorizationContext.Logout();
+      window.location.reload();
+    }
+
     function getAuthenticationArea(){
-        return AuthorizonContext.isLogged() 
-                ? <Button color="inherit">{Globalization.GetString('Sair')}</Button>
-                : <Button color="inherit">{Globalization.GetString('Login')}</Button>
+        return AuthorizationContext.IsLogged() 
+                ? <Button color="inherit" onClick={() => doLogout()}>{Globalization.GetString('Sair')}</Button>
+                : <Button color="inherit" href={"/angel/login"} >{Globalization.GetString('Login')}</Button>
     }
         
     return <div className={classes.root}>
@@ -34,7 +38,7 @@ export default function Layout(props: any) {
                     <Toolbar>
                         <Box className={classes.menuButton} color="inherit" aria-label="menu">
                             <Link href={"/"}>
-                                <img src={Logo}/>
+                                <img src={Logo} alt="Logo"/>
                             </Link>
                         </Box>
                         <Typography variant="h6" className={classes.title}>

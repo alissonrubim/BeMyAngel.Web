@@ -9,11 +9,11 @@ export default class Area extends Component {
     }
 
     public getPath(path: string){
-        if(path == this.props.path)
+        if(path === this.props.path)
             return path
-        else if(this.props.path == "/")
+        else if(this.props.path === "/")
             return path
-        else if(path == "/")
+        else if(path === "/")
             return this.props.path
         else
             return this.props.path + path

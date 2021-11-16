@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
-import Globalization from '../../../helpers/Globalization';
-import { Button, Container, Box, Paper, makeStyles, Typography, Link, Drawer } from '@material-ui/core';
-import ChatRoomEventModel from '../../../models/ChatRoomEventModel';
-import { EventTypes } from '../../../models/ChatRoomEventTypeModel'; 
+import React from 'react';
+import { Box, makeStyles } from '@material-ui/core';
+import ChatEventPresentation, { ChatEventTypes } from 'presentations/ChatEvent.presentation';
 import Moment from 'moment';
 
 const classNames = require('classnames');
@@ -47,64 +45,62 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function RenderMessage(event: ChatRoomEventModel, isMine: boolean){
-  const classes = useStyles();
-
-  var eventData = JSON.parse(event.EventData!);
-
-  var messageClasses = classes.message;
-  var messageBodyClasses = classes.message_body;
-  var messageTimeClasses = classes.message_time;
-
-  if(isMine){
-    messageClasses = classNames(classes.message, classes.message_mine)
-    messageBodyClasses = classNames(classes.message_body, classes.message_body_mine)
-    messageTimeClasses = classNames(classes.message_time, classes.message_time_mine)
-  }
-
-  return (
-    <Box className={messageClasses}>
-      <Box className={messageBodyClasses}>{eventData.Message}</Box>
-      <Box className={messageTimeClasses}>{Moment(event.DataTime).format('hh:mm')}</Box>
-    </Box>
-  );
+export interface ChatEventProps {
+  event: ChatEventPresentation,
+  myChatSessionToken: string
 }
 
-function RenderTypingMessage(event: ChatRoomEventModel){
-  const classes = useStyles();
-
-  var messageClasses = classes.message;
-  var messageBodyClasses = classNames(classes.message_body, classes.message_body_typping);
-
-  return (
-    <Box className={messageClasses}>
-      <Box className={messageBodyClasses}>
-        <span className="spinme-left">
-          <div className='spinner'><div className='bounce1'></div><div className='bounce2'></div><div className='bounce3'></div></div>
-        </span>
-      </Box>
-    </Box>
-  );
-}
-
+/** 
+  Render the Event for the chat. Each event will be rendered base on the EventType
+**/
 export default function ChatEvent(props: ChatEventProps) {
   const classes = useStyles();
-  const currentPersonId = 2;
 
-  function isMine(){
-    return props.event.PersonId == currentPersonId;
+  function RenderMessage(event: ChatEventPresentation, isMine: boolean){
+    var eventData = JSON.parse(event.data!);
+
+    var messageClasses = classes.message;
+    var messageBodyClasses = classes.message_body;
+    var messageTimeClasses = classes.message_time;
+
+    if(isMine){
+      messageClasses = classNames(classes.message, classes.message_mine)
+      messageBodyClasses = classNames(classes.message_body, classes.message_body_mine)
+      messageTimeClasses = classNames(classes.message_time, classes.message_time_mine)
+    }
+
+    return (
+      <Box className={messageClasses}>
+        <Box className={messageBodyClasses}>{eventData.Message}</Box>
+        <Box className={messageTimeClasses}>{Moment(event.dataTime).format('hh:mm')}</Box>
+      </Box>
+    );
   }
 
+  function RenderTypingMessage(event: ChatEventPresentation){
+    var messageClasses = classes.message;
+    var messageBodyClasses = classNames(classes.message_body, classes.message_body_typping);
 
-  if(props.event.ChatRoomEventType.Identifier == EventTypes.SEND_MESSAGE){
+    return (
+      <Box className={messageClasses}>
+        <Box className={messageBodyClasses}>
+          <span className="spinme-left">
+            <div className='spinner'><div className='bounce1'></div><div className='bounce2'></div><div className='bounce3'></div></div>
+          </span>
+        </Box>
+      </Box>
+    );
+  }
+
+  function isMine(){
+    return props.event.chatSessionToken === props.myChatSessionToken;
+  }
+
+  if(props.event.chatEventTypeId === ChatEventTypes.PostMessage){
     return RenderMessage(props.event, isMine())
-  }else if(props.event.ChatRoomEventType.Identifier == EventTypes.TYPING_MESSAGE && !isMine()){
+  }else if(props.event.chatEventTypeId === ChatEventTypes.IsTyping && !isMine()){
     return RenderTypingMessage(props.event)
   }
 
   return <></>;
 };
-
-export interface ChatEventProps {
-  event: ChatRoomEventModel
-}

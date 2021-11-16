@@ -1,46 +1,57 @@
-import { AuthProvider } from 'oidc-react';
-import React, { Component } from 'react';
+import React from 'react';
 import { Redirect } from 'react-router';
-import { useCookies } from 'react-cookie';
+import { setCookie, getCookie } from 'react-use-cookie';
+import IdentityServer from 'gateways/IdentityServer';
+import AccessTokenPresentation from 'presentations/IdentityServer/AccessToken.presentation';
 
 export class Authorization {
-  cookieName: string = "BMA_SESSION_TOKEN";
+  cookieName: string = "BeMyAngelAccessToken";
+  identityServer: IdentityServer;
 
-  isLogged(){
-    const [cookies] = useCookies();
-    return (cookies[this.cookieName] != undefined);
+  constructor(){
+    this.identityServer = new IdentityServer();  
   }
 
-  loginUrl(){
-    return "/angel/login";
+  public GetCurrentToken(): string | null {
+    var cookie = getCookie(this.cookieName);
+    if(cookie === undefined || cookie === ""){
+      return null;
+    }
+    return cookie;
   }
 
-  loginAsAnonymous(){
-    const [cookies, setCookie] = useCookies();
-    setCookie(this.cookieName, "GGHHAA", { path: '/' });
+  public IsLogged(){
+    return this.GetCurrentToken() != null;
   }
 
-  logout(){
-    const [cookies, setCookie, removeCookie] = useCookies();
-    removeCookie(this.cookieName, { path: '/' });
+  public async Login(username: string, password: string): Promise<boolean>{
+    return new Promise<boolean>((resolve, reject) => {
+      this.identityServer.GetTokenUsingPassword(username, password).then((accessToken: AccessTokenPresentation) => {
+        setCookie(this.cookieName, accessToken.access_token, { path: '/' });
+        resolve(true);
+      });
+    });
+  }
+
+  public Logout(){
+    setCookie(this.cookieName, "", { path: '/' });
   }
 }
 
-const AuthorizonContext = new Authorization();
+var AuthorizationContext = new Authorization();
 
-export function Authorize(props: AuthorizeProps) { 
-  if(!AuthorizonContext.isLogged())
-    return <Redirect to={AuthorizonContext.loginUrl()} />
-
-  return (<>{props.children}</>)
-
-}
-interface AuthorizeProps {
+export interface AuthorizeProps {
   children?: any;
   roles?: string[]
 }
+export function Authorize(props: AuthorizeProps) { 
+  if(!AuthorizationContext.IsLogged())
+    return <Redirect to="/angel/login" />
 
-export default AuthorizonContext; 
+  return (<>{props.children}</>)
+}
+
+export default AuthorizationContext;
 
 
 
