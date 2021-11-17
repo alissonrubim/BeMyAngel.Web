@@ -1,10 +1,11 @@
 import React from 'react';
 import Globalization from '../../../helpers/Globalization';
-import { Button, Container, Box, makeStyles, AppBar, Toolbar, Typography, Link } from '@material-ui/core';
+import { Button, Container, Box, AppBar, Toolbar, Typography, Link, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import Logo from '../../../resources/images/be_my_angel.svg'
 import AuthorizationContext from '../../../helpers/Authorization'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
     root: {
       flexGrow: 1,
     },

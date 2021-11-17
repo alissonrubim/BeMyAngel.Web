@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Container, makeStyles } from '@material-ui/core';
+import { Container, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 
 import Chat from 'areas/main/components/Chat';
 import ChatPresentation from 'presentations/Chat.presentation';
 import BeMyAngelApi from 'gateways/BeMyAngelApi';
 import ChatEventPresentation from 'presentations/ChatEvent.presentation';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: 20,
     height: "100vh",

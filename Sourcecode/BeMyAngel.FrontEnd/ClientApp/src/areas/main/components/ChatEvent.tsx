@@ -1,10 +1,11 @@
 import React from 'react';
-import { Box, makeStyles } from '@material-ui/core';
+import { Box, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import ChatEventPresentation, { ChatEventTypes } from 'presentations/ChatEvent.presentation';
 import Moment from 'moment';
 
 const classNames = require('classnames');
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: 30,
     color: theme.palette.common.white

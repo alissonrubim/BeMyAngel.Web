@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Globalization from '../../../helpers/Globalization';
-import { InputAdornment , Container, Box, Paper, makeStyles, Typography, FormControl, Input, InputLabel, Button } from '@material-ui/core';
-import { PermIdentity, LockOpen } from '@material-ui/icons';
+import { InputAdornment , Container, Box, Paper, Typography, FormControl, Input, InputLabel, Button } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { PermIdentity, LockOpen } from '@mui/icons-material';
 import AuthorizationContext from 'helpers/Authorization';
 
 const useStyles = makeStyles({

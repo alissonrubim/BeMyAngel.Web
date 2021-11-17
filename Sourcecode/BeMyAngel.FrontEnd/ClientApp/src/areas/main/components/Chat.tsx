@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, FormControl, IconButton, InputAdornment, OutlinedInput } from '@material-ui/core';
-import { Send } from '@material-ui/icons';
+import { Box, FormControl, IconButton, InputAdornment, OutlinedInput } from '@mui/material';
+import { Send } from '@mui/icons-material';
 
 import ChatEvent from '../components/ChatEvent';
 import ChatPresentation from 'presentations/Chat.presentation';

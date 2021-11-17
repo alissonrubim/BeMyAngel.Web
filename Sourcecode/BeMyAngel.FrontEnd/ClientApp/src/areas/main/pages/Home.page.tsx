@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import Globalization from 'helpers/Globalization';
-import { Button, Container, Box, makeStyles, Typography, Drawer } from '@material-ui/core';
+import { Button, Container, Box, Typography, Drawer, Theme } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Redirect } from 'react-router';
 
 import logoImage from 'resources/images/logo.png';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   root: {
     padding: 40,
     color: theme.palette.common.white
