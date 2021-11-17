@@ -39,6 +39,14 @@ export default class BeMyAngelApi {
     });
   }
 
+  public async Chat_Create(): Promise<ChatPresentation>{
+    return new Promise<ChatPresentation>((resolve) => {
+      this.GetRequest().post(`/chat/create`).then((response) => {
+        resolve(response.data)
+      })
+    });
+  }
+
   /** ChatEvent **/
   public async ChatEvent_PostMessage(ChatId: number, message: string): Promise<void>{
     return new Promise<void>(() => {

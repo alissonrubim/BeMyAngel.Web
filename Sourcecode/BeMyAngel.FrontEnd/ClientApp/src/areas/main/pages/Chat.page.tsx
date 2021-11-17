@@ -26,22 +26,30 @@ export default function ChatPage(props: ChatPageProps) {
   const [chatInfo, setChatInfo] = useState<ChatPresentation>();
 
   useEffect(() => {
-    function getEvents(chatInfo: ChatPresentation){
+    function getChatEvents(chatInfo: ChatPresentation){
       Api.ChatEvent_GetAll(chatInfo.chat.chatId).then((ChatEvents: ChatEventPresentation[]) => {
         chatInfo.chatEvents = ChatEvents;
         setChatInfo(chatInfo);
       });
     }
 
-    if(ChatId){
-      Api.Chat_Get(ChatId).then((chatInfo: ChatPresentation) => {
-        getEvents(chatInfo);
-      })
-    }
-    else{
-      Api.Chat_GetCurrent().then((chatInfo: ChatPresentation) => {
-        getEvents(chatInfo);
-      })
+    if(!chatInfo){
+      if(ChatId){
+        Api.Chat_Get(ChatId).then((chatInfo: ChatPresentation) => {
+          getChatEvents(chatInfo);
+        })
+      }
+      else{
+        Api.Chat_GetCurrent().then((chatInfo: ChatPresentation) => {
+          if(chatInfo.chat === null){
+            Api.Chat_Create().then((chatInfo: ChatPresentation) => {
+            getChatEvents(chatInfo);
+            })
+          }else{
+            getChatEvents(chatInfo);
+          }
+        })
+      }
     }
   }, [ChatId, Api]);
 

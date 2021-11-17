@@ -15,6 +15,8 @@ export interface ChatProps {
 export default function Chat(props: ChatProps) {
   const [messageField, setMessageField] = useState<string>("");
   const [events, setEvents] = useState<ChatEventPresentation[]>(props.data.chatEvents);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
   const ChatHub = new BeMyAngelChatHub();
   const myChatSessionToken = props.data.myChatSessionToken;
 
@@ -28,13 +30,20 @@ export default function Chat(props: ChatProps) {
   }
 
   useEffect(() => {
-    ChatHub.OnReceiveEvent = (hubEvent: ChatEventPresentation) => {
-      var x = [...events, hubEvent];
-      debugger;
-      setEvents(x)
-    };
-    ChatHub.Connect(myChatSessionToken);
-  }, [ChatHub, events, myChatSessionToken]);
+    if(!setIsConnected || !isConnecting){
+      ChatHub.OnConnected = () => {
+        setIsConnected(true);
+      }
+      ChatHub.OnReceiveChatEvent = (senderSessionToken: string, chatEvent: ChatEventPresentation) => {
+
+        /*********ARRUMAR A LISTA DE EVENTOS QUE NAO ESTA LINKANDO DIRETO TODO MUNDO */
+        var newEvents = [...events, chatEvent];
+        setEvents(newEvents)
+      };
+      ChatHub.Connect(myChatSessionToken);
+      setIsConnecting(true);
+    }
+  }, [ChatHub, events, myChatSessionToken, isConnected, isConnecting]);
 
   return (
     <>
